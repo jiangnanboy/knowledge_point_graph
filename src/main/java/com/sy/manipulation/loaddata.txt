@@ -1,0 +1,23 @@
+批量导入数据：
+1.创建节点
+USING PERIODIC COMMIT 300 LOAD CSV WITH HEADERS FROM 'file:///student.csv' AS line
+create (:student {stu_name:line.姓名,age:line.年龄,id:line.id})
+运行之后便创建好了节点student。
+    USING PERIODIC COMMIT 300 ：使用自动提交，每满300条提交一次，防止内存溢出；
+    WITH HEADERS表明csv文件的第一行是属性名。只有在使用了该参数后，才可以使用"line.name"这样的表示方式，否则需使用line[0]的表示方式；
+    as line:为每行数据重命名
+    create语句可以替换成merge，防止导入的数据重复；
+    student代表节点的标签名；
+    stu_name、age、id等代表节点的属性；
+合并相同节点：
+MATCH (n:Tag)  #tag为节点标签
+#以该节点的id字段为统计依据
+WITH n.id AS id, COLLECT(n) AS nodelist, COUNT(*) AS count
+WHERE count > 1
+CALL apoc.refactor.mergeNodes(nodelist) YIELD node
+RETURN node
+
+2.创建关系
+LOAD CSV WITH HEADERS FROM "file:///student_school.csv" AS line
+match (from:student{id:line.student_id}),(to:school {id:line.school_id})
+merge (from)-[r:学校]->(to)#创建标签为学校的关系

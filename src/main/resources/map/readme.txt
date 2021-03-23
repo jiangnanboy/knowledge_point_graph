@@ -1,0 +1,2 @@
+kpid_uuid.csv 知识点id与uuid的映射
+questionid_uuid.csv 题目id与uuid的映射
