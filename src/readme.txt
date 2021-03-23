@@ -10,15 +10,15 @@
 
 二.数据库连接
 
-    1.[mysql.resource_center]
+    1.[mysql.database]
 
-    2.hostname = 196.168.1.5
+    2.hostname = x.x.x.x
 
     3.username = root
 
     4.password = 123
 
-    5.database = k12_resource
+    5.database = k12_database
 
     6.port = 3300
 
